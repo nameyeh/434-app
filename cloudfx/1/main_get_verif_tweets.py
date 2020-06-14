@@ -1,7 +1,3 @@
-
-
-
-
 # Dependencies
 import flask 
 import numpy as np
@@ -13,8 +9,6 @@ from google.cloud import storage
 import datetime 
 import pandas_gbq as gbq
 import os
-
-
 
 def get_verif_tweets(request):
     # Twitter API Keys
@@ -72,5 +66,5 @@ def get_verif_tweets(request):
     
     return None
 
-Function to execute
-get_verif_tweets
+# Function to execute
+# get_verif_tweets
