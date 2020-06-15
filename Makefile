@@ -1,5 +1,7 @@
 install:
 	pip install -r requirements.txt
+test: 
+	python -m pytest -v -s
 lint:
 	pylint --disable=R,C main.py
 run: 
