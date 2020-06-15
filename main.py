@@ -97,12 +97,11 @@ def hello():
 
 @app.route('/html')
 def html():
-    """Returns some custom HTML"""
     return """
     <title>This is a Hello World World Page</title>
     <p><b>Hello World</b></p>
     <p>dx testing page </p>
-    '''
+    """
 @app.route('/time')
 def time():
     my_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
