@@ -1,47 +1,31 @@
 # [START gae_python37_app]
 import flask
 from flask import Flask, url_for
+# , redirect, send_from_directory, request
 from flask import jsonify
-import pandas as pd
-
+# import pandas as pd
 from time import gmtime, strftime
-# from time import ctime, strftime
-import wikipedia
-from textblob import TextBlob
-
+# from textblob import TextBlob
 from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 from google.cloud import bigquery
-
-import os
-import base64
-import sys
-from io import BytesIO
-
-from flask import send_from_directory
-from flask import request
-from flask_api import status
+# import os
+# import base64
+# import sys
+# from io import BytesIO
+# from flask_api import status
 from flasgger import Swagger
-from flask import redirect
-
-from sensible.loginit import logger
-
-
+from sensible.loginit import logger 
 log = logger(__name__)
-
-app = Flask(__name__)
-Swagger(app)
-
-# If `entrypoint` is not defined in app.yaml, App Engine will look for an app
-# called `app` in `main.py`.
+# Swagger(app)
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
-
+    
 @app.route('/')
 def home_page():
     BQclient = bigquery.Client()
-    language_client = language.LanguageServiceClient()
+    # language_client = language.LanguageServiceClient()
     sql  = '''
     SELECT *
     FROM
@@ -55,7 +39,8 @@ def home_page():
     # df=df[['full_text','location']]
     df_table = df.to_html(classes=["table-bordered", "table-striped", "table-hover","table-condensed",
         "table-display: table","table-border-collapse: separate","thead-text-align:center"],header = 'true',index=False,table_id='1')
-    html = f'''
+
+    return """
     <head>
     <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
@@ -76,7 +61,7 @@ def home_page():
             <table class="table">
                 <thead-light>
                 <tbody>
-                {df_table}
+                {}
                 </tbody>
                 </thead-light>
             </table>
@@ -87,8 +72,7 @@ def home_page():
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </body>
-    """
-    return html
+    """.format(df_table)
 
 
 def hello():
@@ -105,23 +89,16 @@ def html():
 @app.route('/time')
 def time():
     my_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    print(f"This was the time I returned")
+    print("This was the time I returned")
     my_time_dict = {"time": my_time}
     return jsonify(my_time_dict)
 
 @app.route('/nlp-entities/')
 def sample_analyze_entities():
     BQclient = bigquery.Client()
-    sql  = '''
-    SELECT *
-    
-    FROM
-    `my-project-1520296049403.TwitterData.TweetsUnique`
-    Order By created_at asc
-    LIMIT 10
-    '''
+    sql  = "SELECT * FROM  `my-project-1520296049403.TwitterData.TweetsUnique` Order By created_at asc LIMIT 10"
+
     df = BQclient.query(sql).to_dataframe()
-    df.shape
     text_content = df['full_text'][0]
 
     client = language.LanguageServiceClient()
@@ -156,7 +133,6 @@ def get_sentiment_scores():
     LIMIT 10
     '''
     df = BQclient.query(sql).to_dataframe()
-    df.shape
     # text_content = df['full_text'][1]
         # content = text_content
     scores = []

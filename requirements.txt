@@ -1,12 +1,10 @@
 Flask 
 pylint 
 pandas
-
 textblob
 google-cloud-language
 google-cloud-bigquery
 flasgger
-
 sensible
 click
 pytest
